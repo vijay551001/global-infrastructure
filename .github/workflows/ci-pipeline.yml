@@ -1,4 +1,4 @@
-name: Continuous Integration Security Audit
+name: Continuous Integration & Image Build
 
 on:
   push:
@@ -7,21 +7,28 @@ on:
     branches: [ main ]
 
 jobs:
-  code-security-audit:
+  build-and-audit:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Clone the pushed codebase repository files onto the cloud machine
       - name: Checkout Code Repository
         uses: actions/checkout@v4
 
+      # Step 2: Provision a clean Node.js environment layer to verify dependencies
       - name: Setup Node.js Environment
         uses: actions/setup-node@v4
         with:
           node-version: '24'
 
-      - name: Validate Configurations and Lint Check
-        run: |
-          echo "[CI PIPELINE] Auditing configuration parameters..."
-          node -v
-          npm --version
-          echo "[CI PIPELINE] Validation tests passed successfully. Codebase is clean!"
+      # Step 3: Set up virtual Docker compilation tools inside the cloud runner
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Step 4: Force compilation test of the Dockerfile to make sure it builds perfectly
+      - name: Test Compile Server Monitor Container Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./server-monitor-app
+          file: ./server-monitor-app/Dockerfile
+          push: false # We only want to test the build for security right now
