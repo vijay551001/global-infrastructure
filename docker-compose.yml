@@ -5,10 +5,9 @@ services:
   task-manager:
     container_name: running-app
     image: task-manger-app
-    ports:
-      - "5000:5000"
+    # Note: We removed the public "ports:" flag array! The app is now protected
+    # inside the private container network, accessible only through Nginx.
     volumes:
-      # Mounts the task manager backend to persist database.json on your host disk
       - ./my-new-app/backend:/app/backend
     restart: always
 
@@ -16,10 +15,19 @@ services:
   server-monitor:
     container_name: running-monitor
     image: server-monitor-app
-    ports:
-      - "4000:4000"
     volumes:
-      # Mounts the server monitor backend to persist health-log.json on your host disk
       - ./server-monitor-app/backend:/app/backend
     restart: always
 
+  # --- Service 3: Nginx Gateway Reverse Proxy ---
+  reverse-proxy:
+    container_name: running-proxy
+    image: nginx:alpine
+    ports:
+      - "80:80" # Binds your physical computer's standard web port 80 to the network grid
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - task-manager
+      - server-monitor
+    restart: always
