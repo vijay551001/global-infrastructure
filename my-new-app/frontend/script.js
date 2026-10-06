@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api/tasks';
+const API_URL = 'http://localhost/api/tasks';
 
 // HTTP GET Request: Fetch tasks from the backend API daemon
 async function fetchTasks() {

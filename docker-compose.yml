@@ -19,15 +19,19 @@ services:
       - ./server-monitor-app/backend:/app/backend
     restart: always
 
-  # --- Service 3: Nginx Gateway Reverse Proxy ---
+    # --- Service 3: Nginx Gateway Reverse Proxy ---
   reverse-proxy:
     container_name: running-proxy
     image: nginx:alpine
     ports:
-      - "80:80" # Binds your physical computer's standard web port 80 to the network grid
+      - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      # Add these two new lines below to pass your frontends to Nginx:
+      - ./my-new-app/frontend:/usr/share/nginx/html/tasks:ro
+      - ./server-monitor-app/frontend:/usr/share/nginx/html/monitor:ro
     depends_on:
       - task-manager
       - server-monitor
     restart: always
+
