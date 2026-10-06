@@ -1,0 +1,8 @@
+# Ignore third-party library binaries
+node_modules/
+
+# Ignore local operational data states
+backend/database.json
+
+# Ignore system environment or secret variable configurations
+.env

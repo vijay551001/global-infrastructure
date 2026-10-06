@@ -1,0 +1,4 @@
+**/node_modules/
+**/backend/database.json
+**/backend/health-log.json
+.env

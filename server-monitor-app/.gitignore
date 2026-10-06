@@ -1,0 +1,3 @@
+node_modules/
+backend/health_log.json
+.env

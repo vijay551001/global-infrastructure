@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Health Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background: #f8f9fa; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        select, input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #28a745; color: white; font-weight: bold; cursor: pointer; border: none; }
+        button:hover { background: #218838; }
+        ul { list-style: none; padding: 0; }
+        li { background: #e9ecef; padding: 12px; margin-bottom: 8px; border-left: 5px solid #28a745; border-radius: 4px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h2>🖥️ Server Monitor Log (Port 4000)</h2>
+    
+    <div class="card">
+        <h3>Log System Status</h3>
+        <select id="serverSelect">
+            <option value="Production-Web-01">Production-Web-01</option>
+            <option value="Staging-DB-01">Staging-DB-01</option>
+            <option value="Backup-NAS-02">Backup-NAS-02</option>
+        </select>
+        <input type="text" id="statusInput" placeholder="Enter status message (e.g., CPU load high, Memory OK)...">
+        <button onclick="logStatus()">Submit Status Report</button>
+    </div>
+
+    <div class="card">
+        <h3>Active System Logs</h3>
+        <ul id="logList"></ul>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:4000/api/logs'; // Mapped to the new port configuration
+
+        async function fetchLogs() {
+            try {
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                const list = document.getElementById('logList');
+                list.innerHTML = '';
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>[${item.timestamp}] ${item.server}</strong>: ${item.status}`;
+                    list.appendChild(li);
+                });
+            } catch (err) { console.error("API error:", err); }
+        }
+
+        async function logStatus() {
+            const server = document.getElementById('serverSelect').value;
+            const status = document.getElementById('statusInput').value;
+            if (!status.trim()) return;
+
+            try {
+                await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ server, status })
+                });
+                document.getElementById('statusInput').value = '';
+                fetchLogs();
+            } catch (err) { console.error("API error:", err); }
+        }
+        fetchLogs();
+    </script>
+</body>
+</html>
