@@ -7,7 +7,8 @@ const app = express();
 const PORT = 4000; // Custom isolated port profile
 const FILE_PATH = path.join(__dirname, 'health-log.json');
 
-app.use(cors());
+// Change your CORS line to look exactly like this:
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 function readLogs() {
