@@ -11,13 +11,25 @@ services:
       - ./my-new-app/backend:/app/backend
     restart: always
 
-  # --- Service 2: Server Monitor Application ---
+  # # --- Service 2: Server Monitor Application ---
+  # server-monitor:
+  #   container_name: running-monitor
+  #   image: server-monitor-app
+  #   volumes:
+  #     - ./server-monitor-app/backend:/app/backend
+  #   restart: always
+  
+    # --- Service 2: Server Monitor Application ---
   server-monitor:
     container_name: running-monitor
-    image: server-monitor-app
+    # Update these lines to force Docker to read your local folder files directly:
+    build:
+      context: ./server-monitor-app
+      dockerfile: Dockerfile
     volumes:
       - ./server-monitor-app/backend:/app/backend
     restart: always
+
 
     # --- Service 3: Nginx Gateway Reverse Proxy ---
   reverse-proxy:
