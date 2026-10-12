@@ -38,4 +38,4 @@ jobs:
           file: ./server-monitor-app/backend/Dockerfile
           push: true # Tells the runner to upload it live
           tags: ghcr.io/vijay551001/server-monitor-app:latest
-     
+       
