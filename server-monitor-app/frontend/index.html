@@ -34,7 +34,8 @@
     </div>
 
     <script>
-        const API_URL = 'http://server-monitor.local'; // Mapped to the new port configuration
+                // Change this line to route requests directly through the Nginx proxy endpoint
+        const API_URL = '/api/logs';  // Mapped to the new port configuration
 
         async function fetchLogs() {
             try {
