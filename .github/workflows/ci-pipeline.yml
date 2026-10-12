@@ -34,8 +34,8 @@ jobs:
       - name: Build and Push Server Monitor Image
         uses: docker/build-push-action@v6
         with:
-          context: ./server-monitor-app/backend
-          file: ./server-monitor-app/backend/Dockerfile
+          context: ./server-monitor-app
+          file: ./server-monitor-app/Dockerfile
           push: true # Tells the runner to upload it live
           tags: ghcr.io/vijay551001/server-monitor-app:latest
        
