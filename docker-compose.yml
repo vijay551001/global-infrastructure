@@ -4,7 +4,7 @@ services:
   # --- Service 1: Task Manager Application ---
   task-manager:
     container_name: running-app
-    image: task-manger-app
+    image: ghcr.io/vijay551001/task-manager-app:latest
     # Note: We removed the public "ports:" flag array! The app is now protected
     # inside the private container network, accessible only through Nginx.
     volumes:
